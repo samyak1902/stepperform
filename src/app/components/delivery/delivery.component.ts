@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { GoogleAnalyticsService } from 'ngx-google-analytics';
 
 @Component({
   selector: 'app-delivery',
@@ -7,7 +8,20 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./delivery.component.css']
 })
 export class DeliveryComponent implements OnInit {
-
+  @Output() OnRegister= new EventEmitter();
+  @Output() OnToggle=new EventEmitter();
+  @Output() OnSubmission = new EventEmitter<any>();
+ @Input() fullName:String;
+  @Input() city:string;
+  @Input() pincode:String;
+  @Input() street:String;
+  @Input() number :String;
+  @Input() block:String;
+  @Input() entrance:String;
+  @Input() appt:String;
+  @Input() notes:String;
+  @Input() type:String;
+  @Input() contact:String;
   detailsForm: FormGroup;
 
   cities:String[] = ["New Delhi","Mumbai", "Chennai", "Bangalore", "Kolkata", "Mysore", "Pune", "Jaipur"];
@@ -16,6 +30,15 @@ export class DeliveryComponent implements OnInit {
 
   submitted:boolean = false;
 
+  change=()=>{
+    if(this.detailsForm.valid){
+      this.OnToggle.emit(true)
+      this.OnRegister.emit(this.detailsForm.value);
+    }else{
+      this.OnToggle.emit(false)
+      // this.OnRegister.emit(this.personalForm.value);
+    }
+  }
   toggle() {
     this.submitted = true;
   }
@@ -24,25 +47,30 @@ export class DeliveryComponent implements OnInit {
     this.submitted = false;
   }
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private GAService: GoogleAnalyticsService) { }
 
   ngOnInit() {
     this.detailsForm = this.formBuilder.group({
-      fullName: ['', Validators.required],
+      fullName: ['', Validators.compose([Validators.required,Validators.pattern("^[a-zA-Z ]+")])],
       city: ['', Validators.required],
-      street: ['',Validators.required],
-      number: ['', Validators.required],
-      block: ['', Validators.required],
-      entrance: ['', Validators.required],
-      appt: ['', Validators.required],
-      contact: ['', Validators.required],
+      pincode: ['', Validators.compose([Validators.required,Validators.maxLength(6)])],
+      street: [''],
+      number: [''],
+      block: [''],
+      entrance: [''],
+      appt: [''],
+      contact: ['', Validators.compose([Validators.required,Validators.max(999999999),Validators.min(10000000)])],
       business: ['', Validators.required],
-      notes: ['', Validators.required]
+      notes: ['']
     });
   };
 
   register(){
-    console.log(this.detailsForm.value);
+    this.GAService.event('Next Button clicked','Delivery','Next')
+    this.OnRegister.emit(this.detailsForm.value);
+    this.OnSubmission.emit('Delivery form is submitted!')
   }
-
+  get formControls(){
+    return this.detailsForm.controls
+  }
 }

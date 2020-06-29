@@ -1,39 +1,60 @@
-<div class="col-12">
-<h1 class="display-1 ">Insuring Party</h1>
-<form [formGroup]="insuringParty">
-    <div class="form-row">
-        <div class="col-8">
-            Enter your EGN/EIK/LNCH
+<h1  style="color:rgb(8,56,95);font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">
+    <b>Insuring Party</b></h1>
+    <form [formGroup]="insuringParty" (submit)="submit()" style="color:rgb(8,56,95)"><br>
+        <div class="form-row">
+            <div class="col-12 col-sm-7 col-md-8 col-lg-8">
+                <label for="egn">Enter your EGN/EIK/LNCH<br>
+                <a href=""><u>Who's data should I fill in?</u> </a></label>
+           
+            </div>
+            <div class="col-12 col-sm-5 col-md-4 col-lg-4">
+                <input class="form-control" id="egn" type="text" formControlName="egn" (change)="change()"
+                    placeholder="Enter your EGN/EIK/LNCH" [(ngModel)]="egn">
+                <div *ngIf="insuringParty.controls.egn.hasError('required') &&(insuringParty.controls.egn.dirty || insuringParty.controls.egn.touched)"
+                    class="error">This field is mandatory</div>
+                <div *ngIf="insuringParty.controls.egn.hasError('pattern') &&(insuringParty.controls.egn.dirty || insuringParty.controls.egn.touched)"
+                    class="error">Only 10 digit numerical value allowed</div>
+            </div>
         </div>
-        <div class="col-4">
-            <input class="form-control" type="text" formControlName="egn" (change)="change()">
-        </div>  
-    </div>
-    <hr>
-    
-    <div class="form-row">
-        <div class="col-8">
-            Place of Permanent Residence?
-        </div>
-        <div class="col-4">
-            <select formControlName="address" class="form-control" (change)="change()">
-                <option value="delhi">Delhi</option>
-                <option value="mumbai">Mumbai</option>
-                
-            </select>    
-        </div>
-    </div>
+        <hr class="line">
+        <br>
+        <div class="form-row">
+            <div class="col-12 col-sm-7  col-md-8 col-lg-8">
+               <label for="address">Place of Permanent Residence?</label>
+            </div>
+            <div class="col-12 col-sm-5 col-md-4 col-lg-4">
+                <!-- <select formControlName="address" [(ngModel)]="address" class="form-control" (change)="change()"> -->
 
-    <hr>
-    <div class="form-row">
-        <div class="col-8">
-            Email
+                <select formControlName="address"  class="form-control" (change)="change()">
+                    <option [selected]='""===address' disabled value="" id="address">--SELECT--</option>
+                    <option *ngFor="let a of addressList" id="address" value='a' [selected]='a===address'>{{a}}</option>
+                </select>
+                    
+                <div class="error" *ngIf="formsControl.address.touched && formsControl.address.errors">
+                    <div *ngIf="formsControl.address.errors.required">This field is mandatory</div>
+                </div>
+            </div>
         </div>
-        <div class="col-4">
-            <input class="form-control" type="email"  formControlName="email" (change)="change()"> 
+
+        <hr class="line">
+        <br>
+        <div class="form-row">
+            <div class="col-12 col-sm-7 col-md-8 col-lg-8">
+                <label for="email"> Email</label>
+            </div>
+            <div class="col-12 col-sm-5 col-md-4 col-lg-4">
+                <input class="form-control" id="email" type="email" formControlName="email" (change)="change()"
+                    placeholder="Enter you email" [(ngModel)]="email">
+                <div class="error" *ngIf="formsControl.email.touched && formsControl.email.errors">
+                    <div *ngIf="formsControl.email.errors.required">This field is mandatory</div>
+                    <div *ngIf="formsControl.email.errors.pattern">Please enter a valid email</div>
+                </div>
+            </div>
         </div>
-    </div>
-    <hr>
-    <button type="button" class="btn btn-primary badge-pill pl-4 pr-4 pt-2 pb-2" style="margin-right: 0;" (click)="submit()" matStepperNext [disabled]="insuringParty.invalid">Next</button>
+        <hr class="line">
+        <br>
+        <button type="submit" class="btn btn-primary rounded-pill col-sm-4 col-lg-2 col-md-3" 
+        matStepperNext [disabled]="insuringParty.invalid">Next</button>
+    
 </form>
-</div>
+

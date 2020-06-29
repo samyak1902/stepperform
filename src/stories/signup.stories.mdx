@@ -1,0 +1,91 @@
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { SignUpComponent } from '../app/components/sign-up/sign-up.component';
+import { moduleMetadata } from "@storybook/angular";
+import { text } from '@storybook/addon-knobs';
+
+<Meta title="MDX/Signup Component" decorators={[
+    moduleMetadata({
+        declarations: [
+            SignUpComponent
+        ],
+        provider: [{}]
+    }),
+]} parameters={{
+    component: SignUpComponent
+}}/>
+
+# Proposal Component 
+
+This is the Signup component.
+
+## MDX
+
+Stotybook Docs allows you to mix stories and documentation in 
+[MDX Format](https://mdxjs.com/)
+
+MDX Combines Marksown and JSX.
+
+## ComponentMeta SB5 Equivalent
+
+This is roughly equivalent to SB5's `storiesOf` :
+
+```
+storiesOf('MDX|SignUpComponent',module)
+    .addParameter({component: SignUpComponent})
+
+```
+
+## Stories
+
+### Default
+
+This is the default story. In this story the users can take a look at the overall
+appearance of the signup component.
+
+<Preview>
+  <Story name="Default">{{
+    component: SignUpComponent,
+    props:{
+      
+    },
+    }}    
+  </Story>
+</Preview>
+
+### Valid
+
+This is the valid credentials story. In this story we provide the valid required credentials for
+all the input fields.
+
+<Preview>
+  <Story name="Valid Credentials">{{
+    component: SignUpComponent,
+    props:{
+      fullName: text('Full Name','James Carter','General'),
+      email: text('Email','jamescarter@infy.com','General'),
+      password: text('Password','James123','General'),
+      confirmPassword: text('Confirm Password','James123','General'),
+      phoneNo: text('Phone No','9854554551','General'),
+    },
+    }}    
+  </Story>
+</Preview> 
+
+### Invalid
+
+This is the invalid credentials story. In this story we provide the invalid required credentials for
+all the input fields.
+
+<Preview>
+  <Story name="Invalid Credentials">{{
+    component: SignUpComponent,
+    props:{
+      fullName: text('Full Name','James Carter','General'),
+      email: text('Email','jamescarter@infy.com','General'),
+      password: text('Password','James123','General'),
+      confirmPassword: text('Confirm Password','James123','General'),
+      phoneNo: text('Phone No','985455451','General'),
+    },
+    }}    
+  </Story>
+</Preview> 
